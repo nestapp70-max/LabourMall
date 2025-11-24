@@ -3,122 +3,108 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LabourConnect — Find Skilled Labour Near You</title>
-  <meta name="description" content="Find skilled labour and technicians near you. Hire plumbers, electricians, masons and more across India." />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>LabourConnect PRO — Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="LabourConnect PRO — premium platform to hire technicians & contractors." />
 </head>
-<body>
-  <header class="header">
-    <div class="bar">
-      <div class="brand container">
-        <div class="logo">LC</div>
-        <div>LabourConnect</div>
+<body class="app-bg">
+  <header class="site-header">
+    <div class="header-left">
+      <div class="logo" id="logo">
+        <div class="logo-box">LC</div>
+        <div class="brand">LabourConnect <span class="pro">PRO</span></div>
       </div>
+    </div>
 
-      <nav class="nav container" aria-label="Main navigation">
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="blog.html">Blog</a>
-        <a href="dashboard.html" class="btn">Dashboard</a>
-        <a href="login.html">Login</a>
-      </nav>
+    <nav class="nav-center">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="#" class="nav-link">Browse</a>
+      <a href="#" class="nav-link">Blog</a>
+      <a href="#" class="nav-link">About</a>
+    </nav>
+
+    <div class="header-right">
+      <button class="btn ghost" id="btn-login">Login</button>
+      <div class="profile-dropdown hide" id="profileDropdown">
+        <img src="" alt="user" class="avatar-sm" id="headerAvatar">
+        <div class="profile-info">
+          <div id="hdrName">Guest</div>
+          <small id="hdrType">Visitor</small>
+        </div>
+        <div class="dropdown-actions">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="subscription.html">Subscriptions</a>
+          <button id="btn-logout" class="btn ghost">Logout</button>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero" aria-labelledby="hero-heading">
-      <h1 id="hero-heading">Find Skilled Labour &amp; Technicians Near You</h1>
-      <p>Connect with certified local professionals across India for construction, household, technical services and more.</p>
-
-      <div class="searchbar" role="search" aria-label="Find technicians">
-        <input class="input" id="home-search" placeholder="Enter PIN code or city..." />
-        <select class="select" id="home-category" aria-label="Select category">
-          <option value="">All categories</option>
-          <option>Construction</option>
-          <option>Household</option>
-          <option>Industrial</option>
-        </select>
-        <button class="btn" id="home-find">Find</button>
-      </div>
-
-      <div class="stats" aria-hidden="true">
-        <div class="stat"><h3>50,000+</h3><div class="small">Registered Workers</div></div>
-        <div class="stat"><h3>1,00,000+</h3><div class="small">Jobs Completed</div></div>
-        <div class="stat"><h3>4.8/5</h3><div class="small">Average Rating</div></div>
-      </div>
-
-      <div class="services" aria-hidden="true">
-        <div class="service-track" id="serviceTrack"></div>
+    <section class="hero glass-card">
+      <h1>Find trusted technicians instantly</h1>
+      <p class="muted">Hire local technicians, manage bids and projects, with secure wallet & subscription benefits.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="dashboard.html">Open Dashboard</a>
+        <a class="btn outline" href="post-job.html">Post a Job</a>
       </div>
     </section>
 
-    <section class="grid" aria-hidden="true">
-      <div class="card">
-        <h3>How It Works</h3>
-        <ol>
-          <li>Post your job with details</li>
-          <li>Receive bids from qualified technicians</li>
-          <li>Connect & hire securely</li>
-        </ol>
+    <section class="features">
+      <div class="feature glass-card">
+        <h3>Premium Profiles</h3>
+        <p class="muted">Verified technicians, portfolios, ratings and live availability.</p>
       </div>
-
-      <div class="card">
-        <h3>Trusted Workers</h3>
-        <p class="small">Background verified profiles and sample work photos (where available)</p>
+      <div class="feature glass-card">
+        <h3>Smart Wallet</h3>
+        <p class="muted">Top-up quickly and unlock instant features with subscription tiers.</p>
       </div>
-
-      <div class="card">
-        <h3>Secure Payments</h3>
-        <p class="small">Pay after job completion. Multiple payment options supported.</p>
+      <div class="feature glass-card">
+        <h3>Real-time Bids</h3>
+        <p class="muted">Watch bids arrive and accept instantly — real-time updates.</p>
       </div>
     </section>
-
   </main>
 
-  <!-- footer (multi-column) -->
-  <footer class="footer-full" role="contentinfo">
-    <div class="footer-grid container">
+  <footer class="site-footer">
+    <div class="footer-grid">
       <div>
-        <div class="logo-big">LC</div>
-        <h3>LabourConnect</h3>
-        <p class="small">India’s fast & reliable platform to find skilled workers, technicians and labour near you.</p>
+        <h4>Company</h4>
+        <p>LabourConnect PRO — match skilled labour with projects.</p>
       </div>
-
       <div>
         <h4>Quick Links</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="post-job.html">Post Job</a>
+        <a href="subscription.html">Subscriptions</a>
       </div>
-
       <div>
-        <h4>Services</h4>
-        <ul class="footer-links">
-          <li><a href="#">Construction Workers</a></li>
-          <li><a href="#">Plumbers</a></li>
-          <li><a href="#">Electricians</a></li>
-          <li><a href="#">Carpenters</a></li>
-          <li><a href="#">Technicians</a></li>
-        </ul>
+        <h4>Policies</h4>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
       </div>
-
       <div>
-        <h4>Contact</h4>
-        <ul class="footer-links">
-          <li>Email: support@labourconnect.in</li>
-          <li>Phone: +91 90000 12345</li>
-          <li>Working Hours: 9 AM – 6 PM</li>
-        </ul>
+        <h4>Contact Us</h4>
+        <a href="https://wa.me/919000000000" target="_blank">WhatsApp</a>
+        <div class="socials">
+          <a aria-label="Twitter" href="#"><svg class="icon">...svg...</svg></a>
+          <a aria-label="LinkedIn" href="#"><svg class="icon">...svg...</svg></a>
+          <a aria-label="Facebook" href="#"><svg class="icon">...svg...</svg></a>
+        </div>
       </div>
     </div>
-
-    <div class="footer-bottom container">© 2025 LabourConnect — All Rights Reserved</div>
+    <div class="footer-bottom muted">© <span id="year"></span> LabourConnect PRO. All rights reserved.</div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
+  <script src="main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('btn-login').addEventListener('click', ()=> location.href='login.html');
+  </script>
 </body>
 </html>
