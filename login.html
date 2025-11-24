@@ -3,37 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login - LabourConnect</title>
+  <title>Login — LabourConnect</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <header class="header">
     <div class="container bar">
-      <div class="brand">LabourConnect</div>
-      <nav class="nav">
-        <a href="index.html" data-link>Home</a>
-        <a href="about.html" data-link>About</a>
-        <a href="blog.html" data-link>Blog</a>
-        <a href="contact.html" data-link>Contact</a>
-        <a href="dashboard.html" class="btn" data-link>Dashboard</a>
-        <a href="login.html" data-link>Login</a>
-      </nav>
+      <div class="brand"><div class="logo">LC</div>LabourConnect</div>
+      <nav class="nav"><a href="index.html">Home</a></nav>
     </div>
   </header>
-  <main class="container">
-    
-<div class="card form">
-  <h2>Login</h2>
-  <form id="login-form">
-    <label>Email</label>
-    <input id="email" type="email" placeholder="you@example.com" required>
-    <div style="margin-top:8px"><button class="button" type="submit">Login</button></div>
-  </form>
-  <p class="small" style="margin-top:8px">Demo: enter any email to simulate login.</p>
-</div>
 
-    <footer class="footer">© 2025 LabourConnect — static demo</footer>
+  <main class="container">
+    <div class="card form" style="max-width:520px;margin:40px auto">
+      <h2>Login</h2>
+      <p class="small">Use email or phone for demo login</p>
+
+      <form id="login-form">
+        <input id="login-input" class="input" placeholder="you@example.com or +91XXXXXXXXXX" />
+        <div style="margin-top:12px; display:flex; gap:8px">
+          <button class="btn" type="submit">Login</button>
+          <a class="badge" href="index.html">Continue as Guest</a>
+        </div>
+      </form>
+
+      <hr style="margin:16px 0; border:none; border-top:1px solid rgba(255,255,255,0.03)">
+
+      <h3>Phone (OTP) — Demo</h3>
+      <p class="small">This demo doesn't send real OTP. Replace with Firebase or SMS provider for production.</p>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input class="input" placeholder="+91 98765 43210" />
+        <button class="btn" onclick="alert('For real OTP use Firebase/Twilio. This is demo.')">Send OTP</button>
+      </div>
+    </div>
+
+    <div class="footer center">© 2025 LabourConnect</div>
   </main>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>
