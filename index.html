@@ -4,17 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>LabourConnect — Find Skilled Labour Near You</title>
+  <meta name="description" content="Find skilled labour and technicians near you. Hire plumbers, electricians, masons and more across India." />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <header class="header">
-    <div class="container bar">
-      <div class="brand">
+    <div class="bar">
+      <div class="brand container">
         <div class="logo">LC</div>
         <div>LabourConnect</div>
       </div>
-      <nav class="nav">
-        <a href="index.html">Home</a>
+
+      <nav class="nav container" aria-label="Main navigation">
+        <a href="index.html" class="active">Home</a>
         <a href="about.html">About</a>
         <a href="blog.html">Blog</a>
         <a href="dashboard.html" class="btn">Dashboard</a>
@@ -24,33 +26,33 @@
   </header>
 
   <main class="container">
-    <section class="hero">
-      <h1>Find Skilled Labour &amp; Technicians Near You</h1>
+    <section class="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading">Find Skilled Labour &amp; Technicians Near You</h1>
       <p>Connect with certified local professionals across India for construction, household, technical services and more.</p>
 
-      <div class="searchbar">
-        <input class="input" placeholder="Enter PIN code or city...">
-        <select class="select">
-          <option>All categories</option>
+      <div class="searchbar" role="search" aria-label="Find technicians">
+        <input class="input" id="home-search" placeholder="Enter PIN code or city..." />
+        <select class="select" id="home-category" aria-label="Select category">
+          <option value="">All categories</option>
           <option>Construction</option>
           <option>Household</option>
           <option>Industrial</option>
         </select>
-        <button class="btn">Find</button>
+        <button class="btn" id="home-find">Find</button>
       </div>
 
-      <div class="stats">
+      <div class="stats" aria-hidden="true">
         <div class="stat"><h3>50,000+</h3><div class="small">Registered Workers</div></div>
         <div class="stat"><h3>1,00,000+</h3><div class="small">Jobs Completed</div></div>
         <div class="stat"><h3>4.8/5</h3><div class="small">Average Rating</div></div>
       </div>
 
-      <div class="services">
-        <div class="service-track"></div>
+      <div class="services" aria-hidden="true">
+        <div class="service-track" id="serviceTrack"></div>
       </div>
     </section>
 
-    <section class="grid">
+    <section class="grid" aria-hidden="true">
       <div class="card">
         <h3>How It Works</h3>
         <ol>
@@ -71,61 +73,51 @@
       </div>
     </section>
 
-<footer class="footer-full">
-  <div class="footer-grid">
-    
-    <div>
-      <div class="logo-big">LC</div>
-      <h3>LabourConnect</h3>
-      <p class="small">
-        India’s fast & reliable platform to find skilled workers, 
-        technicians and labour near you.
-      </p>
-    </div>
+  </main>
 
-    <div>
-      <h4>Quick Links</h4>
-      <ul class="footer-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
+  <!-- footer (multi-column) -->
+  <footer class="footer-full" role="contentinfo">
+    <div class="footer-grid container">
+      <div>
+        <div class="logo-big">LC</div>
+        <h3>LabourConnect</h3>
+        <p class="small">India’s fast & reliable platform to find skilled workers, technicians and labour near you.</p>
+      </div>
 
-    <div>
-      <h4>Services</h4>
-      <ul class="footer-links">
-        <li><a href="#">Construction Workers</a></li>
-        <li><a href="#">Plumbers</a></li>
-        <li><a href="#">Electricians</a></li>
-        <li><a href="#">Carpenters</a></li>
-        <li><a href="#">Technicians</a></li>
-      </ul>
-    </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
 
-    <div>
-      <h4>Contact</h4>
-      <ul class="footer-links">
-        <li>Email: support@labourconnect.in</li>
-        <li>Phone: +91 90000 12345</li>
-        <li>Working Hours: 9 AM – 6 PM</li>
-      </ul>
-      <div class="footer-social">
-        <a href="#"><img src="assets/icons/facebook.svg" alt=""></a>
-        <a href="#"><img src="assets/icons/instagram.svg" alt=""></a>
-        <a href="#"><img src="assets/icons/twitter.svg" alt=""></a>
+      <div>
+        <h4>Services</h4>
+        <ul class="footer-links">
+          <li><a href="#">Construction Workers</a></li>
+          <li><a href="#">Plumbers</a></li>
+          <li><a href="#">Electricians</a></li>
+          <li><a href="#">Carpenters</a></li>
+          <li><a href="#">Technicians</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li>Email: support@labourconnect.in</li>
+          <li>Phone: +91 90000 12345</li>
+          <li>Working Hours: 9 AM – 6 PM</li>
+        </ul>
       </div>
     </div>
-  </div>
 
-  <div class="footer-bottom">
-    © 2025 LabourConnect — All Rights Reserved
-  </div>
-</footer>
-
-  </main>
+    <div class="footer-bottom container">© 2025 LabourConnect — All Rights Reserved</div>
+  </footer>
 
   <script src="assets/js/main.js"></script>
 </body>
