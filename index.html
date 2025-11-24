@@ -3,55 +3,77 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Home - LabourConnect</title>
+  <title>LabourConnect — Find Skilled Labour Near You</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <header class="header">
     <div class="container bar">
-      <div class="brand">LabourConnect</div>
+      <div class="brand">
+        <div class="logo">LC</div>
+        <div>LabourConnect</div>
+      </div>
       <nav class="nav">
-        <a href="index.html" data-link>Home</a>
-        <a href="about.html" data-link>About</a>
-        <a href="blog.html" data-link>Blog</a>
-        <a href="contact.html" data-link>Contact</a>
-        <a href="dashboard.html" class="btn" data-link>Dashboard</a>
-        <a href="login.html" data-link>Login</a>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="dashboard.html" class="btn">Dashboard</a>
+        <a href="login.html">Login</a>
       </nav>
     </div>
   </header>
+
   <main class="container">
-    
-<div class="hero">
-  <h1>Find skilled workers near you</h1>
-  <p class="small">Book trusted plumbers, electricians, carpenters and more — fast and local.</p>
-  <div style="margin-top:12px">
-    <a class="button" href="dashboard.html">Find workers</a>
-    <a style="margin-left:8px" class="button" href="contact.html">Request a job</a>
-  </div>
-</div>
+    <section class="hero">
+      <h1>Find Skilled Labour &amp; Technicians Near You</h1>
+      <p>Connect with certified local professionals across India for construction, household, technical services and more.</p>
 
-<div class="grid">
-  <div class="card">
-    <h3>How it works</h3>
-    <ol>
-      <li>Search or browse trades</li>
-      <li>View worker profiles</li>
-      <li>Contact or book</li>
-    </ol>
-  </div>
-  <div class="card">
-    <h3>Trusted ratings</h3>
-    <p class="small">Verified reviews and sample work photos.</p>
-  </div>
-  <div class="card">
-    <h3>Secure payments</h3>
-    <p class="small">Pay after job completion.</p>
-  </div>
-</div>
+      <div class="searchbar">
+        <input class="input" placeholder="Enter PIN code or city...">
+        <select class="select">
+          <option>All categories</option>
+          <option>Construction</option>
+          <option>Household</option>
+          <option>Industrial</option>
+        </select>
+        <button class="btn">Find</button>
+      </div>
 
-    <footer class="footer">© 2025 LabourConnect — static demo</footer>
+      <div class="stats">
+        <div class="stat"><h3>50,000+</h3><div class="small">Registered Workers</div></div>
+        <div class="stat"><h3>1,00,000+</h3><div class="small">Jobs Completed</div></div>
+        <div class="stat"><h3>4.8/5</h3><div class="small">Average Rating</div></div>
+      </div>
+
+      <div class="services">
+        <div class="service-track"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>How It Works</h3>
+        <ol>
+          <li>Post your job with details</li>
+          <li>Receive bids from qualified technicians</li>
+          <li>Connect & hire securely</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>Trusted Workers</h3>
+        <p class="small">Background verified profiles and sample work photos (where available)</p>
+      </div>
+
+      <div class="card">
+        <h3>Secure Payments</h3>
+        <p class="small">Pay after job completion. Multiple payment options supported.</p>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 LabourConnect — static demo</div>
   </main>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>
