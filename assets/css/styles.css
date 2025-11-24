@@ -1,43 +1,282 @@
-/* Dashboard extra styles - append to your styles.css */
-.dash-wrap{max-width:1200px;margin:28px auto;padding:0 20px}
-.dash-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.dash-title{font-size:22px;font-weight:700}
-.search-filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.filter-input{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:var(--panel);color:var(--muted);min-width:220px}
-.filter-short{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:var(--card);color:var(--muted)}
-.middle-row{display:flex;gap:16px;margin-top:18px}
-.left-col{flex:1}
-.right-col{width:420px}
+/* ===========================
+   Dashboard Layout
+=========================== */
+.dash-wrap {
+  max-width: 1200px;
+  margin: 28px auto;
+  padding: 0 20px;
+}
 
-/* worker list card */
-.worker-card{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02);margin-bottom:12px;cursor:pointer}
-.worker-avatar{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#05c0a0,#0db5b0);display:flex;align-items:center;justify-content:center;font-weight:800;color:#042;flex-shrink:0;font-size:20px}
-.worker-meta{flex:1}
-.worker-meta h4{margin:0 0 6px 0}
-.worker-meta .small{color:var(--muted);font-size:13px}
-.worker-tags{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
-.tag{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);font-size:12px}
+.dash-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
 
-/* rating & action */
-.worker-right{text-align:right}
-.rating-bubble{display:inline-block;padding:8px;border-radius:8px;background:linear-gradient(90deg,#ffb86b,#ff9a3d);color:#012; font-weight:700; margin-bottom:8px}
-.whatsapp-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:linear-gradient(180deg,#00d79e,#00b887);color:#003126;font-weight:800;border:none;cursor:pointer}
+.dash-title {
+  font-size: 22px;
+  font-weight: 700;
+}
 
-/* customer/job box */
-.job-box{padding:16px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02)}
-.job-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);margin-bottom:10px}
-.job-left .small{color:var(--muted);font-size:13px}
+.search-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-/* modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(3,7,8,0.7);display:flex;align-items:center;justify-content:center;z-index:80}
-.modal{width:920px;max-width:95%;background:var(--panel);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);display:flex;gap:16px;max-height:85vh;overflow:auto}
-.modal .left{width:320px}
-.modal .gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.modal .gallery img{width:100%;height:110px;object-fit:cover;border-radius:8px}
+.filter-input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: var(--panel);
+  color: var(--muted);
+  min-width: 220px;
+}
 
-/* small responsive */
-@media (max-width:960px){
-  .right-col{width:320px}
-  .modal{flex-direction:column}
-  .modal .left{width:100%}
+.filter-short {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: var(--card);
+  color: var(--muted);
+}
+
+.middle-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.left-col {
+  flex: 1;
+}
+
+.right-col {
+  width: 420px;
+}
+
+/* ===========================
+   Worker Card
+=========================== */
+.worker-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.worker-card:hover {
+  border-color: #00d79e;
+  background: linear-gradient(180deg, rgba(0,255,200,0.08), rgba(0,255,200,0.03));
+  transform: translateY(-2px);
+}
+
+.worker-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,#05c0a0,#0db5b0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #042;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.worker-meta {
+  flex: 1;
+}
+
+.worker-meta h4 {
+  margin: 0 0 6px 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.worker-meta .small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.worker-tags {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ===========================
+   Rating + WhatsApp Button
+=========================== */
+.worker-right {
+  text-align: right;
+}
+
+.rating-bubble {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#ffb86b,#ff9a3d);
+  color: #012;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,#00d79e,#00b887);
+  color: #003126;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.whatsapp-btn:hover {
+  opacity: 0.85;
+}
+
+/* ===========================
+   Job Box
+=========================== */
+.job-box {
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.job-box-title {
+  font-size: 18px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.job-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 12px;
+  transition: 0.2s ease;
+}
+
+.job-item:hover {
+  background: rgba(0,255,200,0.06);
+}
+
+.job-left .small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===========================
+   Customer Job Badge
+=========================== */
+.job-price {
+  background: rgba(0,255,150,0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #00e89a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bid-count {
+  margin-top: 8px;
+  background: rgba(0,170,255,0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #35b3ff;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ===========================
+   Technician Modal
+=========================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3,7,8,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  width: 920px;
+  max-width: 95%;
+  background: var(--panel);
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  gap: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal .left {
+  width: 320px;
+}
+
+.modal .gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.modal .gallery img {
+  width: 100%;
+  height: 115px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 960px) {
+  .right-col {
+    width: 100%;
+  }
+  .middle-row {
+    flex-direction: column;
+  }
+  .modal {
+    flex-direction: column;
+  }
+  .modal .left {
+    width: 100%;
+  }
 }
