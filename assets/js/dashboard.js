@@ -1,281 +1,254 @@
-// assets/js/dashboard.js
-// Simulated data and behaviors: filtering, modal, wallet, whatsapp availability, bidding box
+/* assets/js/dashboard.js
+   PRO Dashboard logic: rendering, filtering, modal, realtime
+*/
 
-// ------------------------ Demo data ------------------------
-const WORKERS = [
-  {id:1,name:'Ramesh Patel',role:'Mason',city:'Ahmedabad',pin:'380001',rating:4.7, base:199, skills:['Masonry','Brickwork','Tile'], years:10, gallery:['assets/img/blog-1.jpg','assets/img/blog-2.jpg']},
-  {id:2,name:'Suresh Verma',role:'Plumber',city:'Lucknow',pin:'226001',rating:4.9, base:249, skills:['Pipes','Bathroom'], years:5, gallery:['assets/img/blog-2.jpg','assets/img/blog-3.jpg']},
-  {id:3,name:'Amit Singh',role:'Carpenter',city:'Jaipur',pin:'302001',rating:4.8, base:299, skills:['Furniture','Doors'], years:12, gallery:['assets/img/blog-3.jpg']},
-  {id:4,name:'Vijay Kumar',role:'Electrician',city:'Bengaluru',pin:'560001',rating:4.6, base:249, skills:['Wiring','Lighting'], years:6, gallery:['assets/img/blog-1.jpg']},
-  {id:5,name:'Mohammed Rizwan',role:'Painter',city:'Hyderabad',pin:'500001',rating:4.7, base:219, skills:['House Painting','POP'], years:9, gallery:[]},
+/* ==== Demo dataset (replace with API calls in production) ==== */
+const TECHS = [
+  {id:1, init:'RP', name:'Ramesh Patel', role:'Electrician', city:'Bengaluru', exp:'8 yrs', rating:4.7, base:249, phone:'919900112233', skills:['Wiring','Lighting']},
+  {id:2, init:'SV', name:'Suresh Verma', role:'Plumber', city:'Lucknow', exp:'5 yrs', rating:4.9, base:219, phone:'919900334455', skills:['Pipes','Bathroom']},
+  {id:3, init:'AS', name:'Amit Singh', role:'Carpenter', city:'Jaipur', exp:'12 yrs', rating:4.8, base:299, phone:'919900556677', skills:['Furniture','Doors']},
+  {id:4, init:'VK', name:'Vijay Kumar', role:'Painter', city:'Hyderabad', exp:'6 yrs', rating:4.6, base:229, phone:'919900778899', skills:['Painting','POP']},
+  {id:5, init:'MR', name:'Mohammed Rizwan', role:'Mason', city:'Ahmedabad', exp:'10 yrs', rating:4.7, base:199, phone:'919901112233', skills:['Brickwork','Plaster']}
 ];
 
-// Sample jobs (customer box)
-const JOBS = [
-  {id:1,title:'EV Scooter not charging', customer:'Asha R.', pin:'560076', budget:'₹350–500', bids:3},
-  {id:2,title:'AC not cooling', customer:'Vikram S.', pin:'400001', budget:'₹600–900', bids:2},
-  {id:3,title:'Washing machine noisy', customer:'Neha M.', pin:'500032', budget:'₹450–650', bids:1},
-  {id:4,title:'Solar inverter replacement', customer:'Ramesh K.', pin:'560003', budget:'₹700–1000', bids:1},
-  {id:5,title:'Fridge gas refill', customer:'Pooja T.', pin:'600055', budget:'₹750–1100', bids:2},
+let JOBS = [
+  {id:101, title:'EV Scooter not charging', customer:'Asha R.', pin:'560076', range:'₹350–500', bidders:[{tech:'Ramesh Patel',price:430},{tech:'Suresh Verma',price:420}]},
+  {id:102, title:'AC not cooling', customer:'Vikram S.', pin:'400001', range:'₹600–900', bidders:[{tech:'Amit Singh',price:700}]},
+  {id:103, title:'Washing machine noisy', customer:'Neha M.', pin:'500032', range:'₹450–650', bidders:[]},
 ];
 
-// ------------------------ state ------------------------
-let state = {
-  q: '',
-  pin: '',
-  city: '',
-  category: '',
-  wallet: Number(localStorage.getItem('lc_wallet') || 0),
-  confirmationModal: null
+/* state */
+const state = {
+  wallet: Number(localStorage.getItem('lc_wallet') || 0)
 };
 
-// ------------------------ DOM refs ------------------------
-const workersContainer = document.getElementById('workersContainer');
-const serviceTrack = document.getElementById('serviceTrack');
-const jobsList = document.getElementById('jobsList');
-const walletAmt = document.getElementById('walletAmt');
+/* helpers */
+function $(sel){ return document.querySelector(sel) }
+function $all(sel){ return Array.from(document.querySelectorAll(sel)) }
 
-// ------------------------ init ------------------------
-document.addEventListener('DOMContentLoaded', ()=>{
-  walletAmt.textContent = `₹${state.wallet}`;
-  renderServices();
-  renderWorkers(WORKERS);
-  renderJobs();
-  bindFilters();
-  bindWalletButtons();
+/* render service carousel */
+const services = ['Mason','Carpenter','Electrician','Plumber','Welder','Painter','Bar Bender','Scaffolder','Heavy machinery','Construction'];
+function renderServices(){
+  const track = $('#serviceTrack');
+  track.innerHTML = '';
+  services.forEach(s=>{
+    const b = document.createElement('button');
+    b.className = 'service-btn';
+    b.innerHTML = `<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted)"/></svg><small>${s}</small>`;
+    b.addEventListener('click', ()=> { $('#q').value = s; applyFilters(); });
+    track.appendChild(b);
+  });
+}
+
+/* render technicians into live panel and full list */
+function renderTechRow(t){
+  const row = document.createElement('div');
+  row.className = 'tech-row';
+  row.setAttribute('data-id', t.id);
+  row.innerHTML = `
+    <div class="tech-avatar">${t.init}</div>
+    <div class="tech-main">
+      <div class="tech-name">${t.name}</div>
+      <div class="tech-sub">${t.role} • ${t.city} • ${t.exp}</div>
+      <div class="tech-tags">${t.skills.map(k=>`<span class="tag">${k}</span>`).join('')}</div>
+    </div>
+    <div class="tech-right">
+      <div class="rating-pill">${t.rating}★</div>
+      <button class="btn whatsapp" data-id="${t.id}" title="WhatsApp ${t.name}">WhatsApp</button>
+    </div>`;
+  // click to open profile
+  row.addEventListener('click', (e)=> {
+    if(e.target.closest('.btn.whatsapp')) return;
+    openProfile(t.id);
+  });
+  // whatsapp click
+  row.querySelector('.btn.whatsapp').addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    startWhatsApp(t.id);
+  });
+  return row;
+}
+function renderTechList(list = TECHS){
+  const liveBox = $('#liveTechBox');
+  const fullList = $('#techList');
+  liveBox.innerHTML = '';
+  fullList.innerHTML = '';
+  list.forEach(t => {
+    liveBox.appendChild(renderTechRow(t));
+    fullList.appendChild(renderTechRow(t).cloneNode(true));
+  });
+}
+
+/* render featured */
+function renderFeatured(){
+  const f = $('#featured');
+  f.innerHTML = '';
+  const picks = TECHS.slice(0,3);
+  picks.forEach(t=>{
+    const card = document.createElement('div'); card.className = 'featured-card';
+    card.innerHTML = `<strong>${t.role}</strong><div class="muted">${t.rating} • ${t.exp}</div>`;
+    f.appendChild(card);
+  });
+}
+
+/* render jobs (live & full list) */
+function buildJobCard(j){
+  const node = document.createElement('div'); node.className = 'job-row';
+  node.innerHTML = `
+    <div class="job-left">
+      <div class="job-title">${j.title}</div>
+      <div class="job-meta muted">${j.customer} • ${j.pin}</div>
+    </div>
+    <div class="job-right">
+      <div class="price-badge">${j.range}</div>
+      <button class="bids-btn" data-id="${j.id}">${j.bidders.length} Bids</button>
+    </div>
+  `;
+  // attach handler to toggle bidders
+  node.querySelector('.bids-btn').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    toggleBidders(j.id, node);
+  });
+  return node;
+}
+function renderJobLists(){
+  const liveJobBox = $('#liveJobBox');
+  const jobList = $('#jobList');
+  liveJobBox.innerHTML = '';
+  jobList.innerHTML = '';
+  JOBS.forEach(j=>{
+    liveJobBox.appendChild(buildJobCard(j));
+    jobList.appendChild(buildJobCard(j).cloneNode(true));
+    // add expanded bidders area under jobList
+    const biddersArea = document.createElement('div'); biddersArea.className = 'bidders-list'; biddersArea.id = 'bidders-' + j.id;
+    biddersArea.innerHTML = j.bidders.map(b => `<div class="bid-row"><div>${b.tech}</div><div class="muted">₹${b.price} <button class="btn-ghost accept-btn" data-job="${j.id}" data-tech="${b.tech}" data-price="${b.price}">Accept</button></div></div>`).join('') || '<div class="muted">No bids yet</div>';
+    jobList.appendChild(biddersArea);
+  });
+  // attach accept handlers
+  $all('.accept-btn').forEach(b => b.addEventListener('click', (e) => {
+    const jid = b.getAttribute('data-job'), tech = b.getAttribute('data-tech'), price = b.getAttribute('data-price');
+    acceptBid(jid, tech, price);
+  }));
+}
+
+/* toggle bidders area */
+function toggleBidders(id, jobNode){
+  const area = document.getElementById('bidders-'+id);
+  if(!area) return;
+  const open = area.style.display === 'block';
+  // close others
+  $all('.bidders-list').forEach(a=> a.style.display = 'none');
+  area.style.display = open ? 'none' : 'block';
+  // smooth scroll into view
+  if(!open) area.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* accept bid demo */
+function acceptBid(jobId, tech, price){
+  if(!confirm(`Accept ${tech} for job ${jobId} at ₹${price}?`)) return;
+  alert(`Accepted ${tech} for job ${jobId} (demo).`);
+  // real implementation: call backend and update UI
+}
+
+/* profile modal open */
+function openProfile(id){
+  const t = TECHS.find(x => x.id === Number(id));
+  if(!t) return;
+  $('#modalAvatar').textContent = t.init;
+  $('#modalName').textContent = t.name;
+  $('#modalRole').textContent = `${t.role} • ${t.city}`;
+  $('#modalExp').textContent = t.exp;
+  $('#modalBase').textContent = '₹' + t.base;
+  $('#modalRating').textContent = t.rating + '★';
+  $('#modalSkills').textContent = t.skills.join(' • ');
+  $('#modalBio').textContent = `${t.name} — experienced ${t.role} with skills in ${t.skills.join(', ')}. Verified on LabourConnect.`;
+  // gallery (placeholder)
+  $('#modalGallery').innerHTML = '';
+  for(let i=0;i<3;i++){
+    const img = document.createElement('img'); img.src = `https://picsum.photos/seed/${t.init}${i}/300/180`; $('#modalGallery').appendChild(img);
+  }
+  // modal whatsapp binding
+  $('#modalWhatsapp').onclick = () => startWhatsApp(t.id);
+  // show modal
+  $('#profileModal').style.display = 'flex';
+  $('#profileModal').setAttribute('aria-hidden','false');
+}
+$('#modalClose').addEventListener('click', ()=> {
+  $('#profileModal').style.display = 'none';
+  $('#profileModal').setAttribute('aria-hidden','true');
 });
 
-// ------------------------ render services (quick slider) ------------------------
-function renderServices(){
-  const core = ['Mason','Carpenter','Electrician','Plumber','Welder','Painter','Bar Bender','Scaffolder','Heavy machinery'];
-  serviceTrack.innerHTML = '';
-  core.forEach(s=>{
-    const el = document.createElement('div');
-    el.className = 'service';
-    el.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" style="color:var(--muted)"><path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><small>${s}</small>`;
-    el.addEventListener('click', ()=>{ document.getElementById('q').value = s; applyFilters(); });
-    serviceTrack.appendChild(el);
-  });
+/* wallet + whatsapp gating */
+function changeWallet(amount){
+  state.wallet = amount;
+  localStorage.setItem('lc_wallet', String(state.wallet));
+  $('#walletAmt').textContent = '₹' + state.wallet;
 }
+$('#add50Btn').addEventListener('click', ()=> { changeWallet(state.wallet + 50); alert('Added ₹50 (demo)'); });
+$('#addFundsBtn').addEventListener('click', ()=> { changeWallet(state.wallet + 100); alert('Added ₹100 (demo)'); });
+$('#clearWalletBtn').addEventListener('click', ()=> { changeWallet(0); alert('Wallet cleared'); });
 
-// ------------------------ render worker list ------------------------
-function renderWorkers(list){
-  workersContainer.innerHTML = '';
-  if(list.length === 0){
-    workersContainer.innerHTML = '<div class="small">No technicians found for these filters.</div>';
-    return;
-  }
-  list.forEach(w=>{
-    const div = document.createElement('div');
-    div.className = 'worker-card';
-    div.innerHTML = `
-      <div class="worker-avatar">${initials(w.name)}</div>
-      <div class="worker-meta">
-        <h4>${w.name}</h4>
-        <div class="small">${w.role} • ${w.city} • ${w.years} yrs</div>
-        <div class="worker-tags">
-           <span class="tag">Base ₹${w.base}</span>
-           ${w.skills.slice(0,3).map(x=>`<span class="tag">${x}</span>`).join('')}
-        </div>
-      </div>
-      <div class="worker-right">
-        <div class="rating-bubble">${w.rating} ★</div>
-        <div><button class="whatsapp-btn" data-id="${w.id}">WhatsApp</button></div>
-      </div>
-    `;
-    // click to open profile
-    div.addEventListener('click', (e)=>{
-      // if whatsapp button clicked, let that handler run
-      if(e.target.closest('.whatsapp-btn')) return;
-      openProfileModal(w.id);
-    });
-    // whatsapp button handler (separate)
-    div.querySelector('.whatsapp-btn').addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      startWhatsAppChat(w.id);
-    });
-    workersContainer.appendChild(div);
-  });
-}
-
-// ------------------------ render jobs list ------------------------
-function renderJobs(){
-  jobsList.innerHTML = '';
-  JOBS.forEach(j=>{
-    const item = document.createElement('div');
-    item.className = 'job-item';
-    item.innerHTML = `<div class="job-left">
-                        <strong>${j.title}</strong>
-                        <div class="small">${j.customer} · PIN ${j.pin}</div>
-                      </div>
-                      <div style="text-align:right">
-                        <div class="badge" style="background:linear-gradient(90deg,#0fb8a0,#07a98f);color:#012">${j.budget}</div>
-                        <div style="margin-top:8px"><button class="badge" data-id="${j.id}">${j.bids} Bids</button></div>
-                      </div>`;
-    jobsList.appendChild(item);
-  });
-}
-
-// ------------------------ filter binding ------------------------
-function bindFilters(){
-  document.getElementById('filterBtn').addEventListener('click', applyFilters);
-  document.getElementById('q').addEventListener('keyup', (e)=>{ if(e.key === 'Enter') applyFilters(); });
-  document.getElementById('pin').addEventListener('keyup', (e)=>{ if(e.key === 'Enter') applyFilters(); });
-  document.getElementById('city').addEventListener('keyup', (e)=>{ if(e.key === 'Enter') applyFilters(); });
-  document.getElementById('category').addEventListener('change', applyFilters);
-}
-
-function applyFilters(){
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  const pin = document.getElementById('pin').value.trim();
-  const city = document.getElementById('city').value.trim().toLowerCase();
-  const category = document.getElementById('category').value;
-
-  const filtered = WORKERS.filter(w=>{
-    if(q){
-      const inName = w.name.toLowerCase().includes(q);
-      const inRole = w.role.toLowerCase().includes(q);
-      const inSkills = w.skills.join(' ').toLowerCase().includes(q);
-      if(!(inName || inRole || inSkills)) return false;
-    }
-    if(pin && w.pin !== pin) return false;
-    if(city && w.city.toLowerCase() !== city) return false;
-    // category is not strictly mapped, so ignore or you can add mapping
-    return true;
-  });
-  renderWorkers(filtered);
-}
-
-// ------------------------ modal (profile) ------------------------
-function openProfileModal(id){
-  const worker = WORKERS.find(w=>w.id===id);
-  if(!worker) return;
-  const root = document.getElementById('profileModalRoot');
-  root.innerHTML = `
-    <div class="modal-backdrop" id="modalBack">
-      <div class="modal" role="dialog">
-        <div class="left">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#05c0a0,#0db5b0);display:flex;align-items:center;justify-content:center;font-weight:800;color:#042;font-size:26px">${initials(worker.name)}</div>
-            <div>
-              <h3 style="margin:0">${worker.name}</h3>
-              <div class="small">${worker.role} • ${worker.city}</div>
-              <div class="small">Experience: ${worker.years} yrs</div>
-            </div>
-          </div>
-          <div style="margin-top:12px">
-            <strong>Skills</strong>
-            <div style="margin-top:8px">${worker.skills.map(s=>`<span class="tag">${s}</span>`).join('')}</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <strong>Base price</strong>
-            <div class="small">₹${worker.base}</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <button class="whatsapp-btn" id="modalWhatsappBtn">WhatsApp</button>
-            <a class="btn" href="javascript:closeModal()" style="margin-left:8px">Close</a>
-          </div>
-        </div>
-
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div><strong>Portfolio & Photos</strong><div class="small">Work gallery & certifications</div></div>
-            <div class="rating-bubble">${worker.rating} ★</div>
-          </div>
-
-          <p style="margin-top:12px">${worker.name} has ${worker.years} years of experience in ${worker.role}. ${worker.skills.join(', ')}.</p>
-
-          <div class="gallery" id="modalGallery"></div>
-
-          <div style="margin-top:14px" id="modalActions"></div>
-        </div>
-      </div>
-    </div>
-  `;
-  // populate gallery
-  const g = document.getElementById('modalGallery');
-  g.innerHTML = '';
-  (worker.gallery.length? worker.gallery : ['assets/img/blog-1.jpg']).forEach(src=>{
-    const img = document.createElement('img'); img.src = src; g.appendChild(img);
-  });
-
-  // whatsapp handler
-  document.getElementById('modalWhatsappBtn').addEventListener('click', ()=>{
-    startWhatsAppChat(worker.id);
-  });
-
-  // close on backdrop click
-  document.getElementById('modalBack').addEventListener('click', (e)=>{
-    if(e.target.id === 'modalBack') closeModal();
-  });
-}
-
-function closeModal(){
-  const root = document.getElementById('profileModalRoot');
-  root.innerHTML = '';
-}
-
-// ------------------------ whatsapp & wallet logic ------------------------
-function startWhatsAppChat(workerId){
-  // require minimum wallet balance >= 10
+function startWhatsApp(id){
+  const t = TECHS.find(x => x.id === Number(id));
+  if(!t) return;
   if(state.wallet < 10){
-    showSubscriptionPopup();
+    if(confirm('Contact requires minimum ₹10 wallet balance. Add ₹50 now?')){
+      changeWallet(state.wallet + 50);
+      window.open(`https://wa.me/${t.phone}?text=${encodeURIComponent('Hi '+t.name+', I found your profile on LabourConnect and need service.')}`, '_blank');
+    }
     return;
   }
-  const worker = WORKERS.find(w=>w.id===workerId);
-  // open WhatsApp (simulated) — open wa.me link with prefilled text
-  const text = encodeURIComponent(`Hi ${worker.name}, I found your profile on LabourConnect. Are you available?`);
-  const url = `https://wa.me/?text=${text}`;
-  window.open(url,'_blank');
+  // open whatsapp link
+  window.open(`https://wa.me/${t.phone}?text=${encodeURIComponent('Hi '+t.name+', I found your profile on LabourConnect and need service.')}`, '_blank');
 }
 
-// subscription popup
-function showSubscriptionPopup(){
-  const root = document.getElementById('profileModalRoot');
-  root.innerHTML = `
-    <div class="modal-backdrop" id="subscribeBack">
-      <div class="modal" style="width:560px;max-width:95%">
-        <div style="flex:1">
-          <h3>Wallet balance low</h3>
-          <p class="small">To contact technicians via WhatsApp you need a minimum wallet balance of ₹10. Add funds to continue.</p>
-          <div style="margin-top:12px;display:flex;gap:8px">
-            <button class="btn" id="add10Btn">Add ₹10</button>
-            <a class="badge" href="contact.html" id="subsHelp">Contact Support</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('add10Btn').addEventListener('click', ()=>{
-    changeWallet(state.wallet + 10);
-    closeModal();
-  });
-  document.getElementById('subscribeBack').addEventListener('click',(e)=>{ if(e.target.id==='subscribeBack') closeModal(); });
+/* filters */
+function applyFilters(){
+  const q = $('#q').value.trim().toLowerCase();
+  const pin = $('#pin').value.trim();
+  const city = $('#city').value.trim().toLowerCase();
+  const cat = $('#category').value.trim().toLowerCase();
+  let filtered = TECHS.slice();
+  if(q) filtered = filtered.filter(t => t.name.toLowerCase().includes(q) || t.role.toLowerCase().includes(q) || t.skills.join(' ').toLowerCase().includes(q));
+  if(city) filtered = filtered.filter(t => t.city.toLowerCase() === city);
+  // pin & category demo: no mapping -> ignored
+  renderTechList(filtered);
+}
+$('#filterBtn').addEventListener('click', applyFilters);
+$('#resetBtn').addEventListener('click', ()=> { $('#q').value=''; $('#pin').value=''; $('#city').value=''; $('#category').value=''; renderTechList(TECHS); });
+
+/* realtime simulation: events and feed */
+function simulateRealtime(){
+  const chance = Math.random();
+  if(chance < 0.6){
+    // new bid on a random job
+    const j = JOBS[Math.floor(Math.random()*JOBS.length)];
+    const t = TECHS[Math.floor(Math.random()*TECHS.length)];
+    const price = 300 + Math.floor(Math.random()*600);
+    j.bidders.push({tech: t.name, price});
+    $('#liveJobStatus').textContent = `${t.name} placed a bid ₹${price} on "${j.title}"`;
+    renderJobLists();
+  } else {
+    const t = TECHS[Math.floor(Math.random()*TECHS.length)];
+    $('#liveTechStatus').textContent = `${t.name} is now online (available)`;
+    // small pulse on tech item
+    const node = $all('.tech-row').find(n=> n.textContent.includes(t.name));
+    if(node){ node.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'}], {duration:400, direction:'alternate'}); }
+  }
 }
 
-// ------------------------ wallet helpers ------------------------
-function changeWallet(v){
-  state.wallet = v;
-  localStorage.setItem('lc_wallet', v);
-  walletAmt.textContent = `₹${state.wallet}`;
+/* init */
+function init(){
+  changeWallet(state.wallet);
+  renderServices();
+  renderTechList(TECHS);
+  renderFeatured();
+  renderJobLists();
+  // live panels initial render
+  renderTechList(TECHS);
+  renderJobLists();
+  // simulate realtime every 7-10s
+  setInterval(simulateRealtime, 7000 + Math.floor(Math.random()*3000));
 }
-
-// bind demo wallet buttons
-function bindWalletButtons(){
-  document.getElementById('addFundsBtn').addEventListener('click', ()=>{
-    changeWallet(state.wallet + 50);
-    alert('Added ₹50 to wallet (demo)');
-  });
-  document.getElementById('clearWalletBtn').addEventListener('click', ()=>{
-    changeWallet(0);
-    alert('Wallet cleared');
-  });
-}
-
-// ------------------------ helpers ------------------------
-function initials(name){
-  return name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
-}
-window.initials = initials;
+function renderServices(){ renderServices = () => {}; } // placeholder to avoid lint
+init();
