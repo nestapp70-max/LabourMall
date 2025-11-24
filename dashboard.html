@@ -3,34 +3,61 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard - LabourConnect</title>
+  <title>Dashboard — LabourConnect</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <header class="header">
     <div class="container bar">
-      <div class="brand">LabourConnect</div>
+      <div class="brand"><div class="logo">LC</div>LabourConnect</div>
       <nav class="nav">
-        <a href="index.html" data-link>Home</a>
-        <a href="about.html" data-link>About</a>
-        <a href="blog.html" data-link>Blog</a>
-        <a href="contact.html" data-link>Contact</a>
-        <a href="dashboard.html" class="btn" data-link>Dashboard</a>
-        <a href="login.html" data-link>Login</a>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="login.html">Login</a>
       </nav>
     </div>
   </header>
+
   <main class="container">
-    
-<div class="card">
-  <h2>Dashboard — welcome <span id="dashboard-user"></span></h2>
-  <p class="small">Browse available workers.</p>
-</div>
+    <div style="display:flex; gap:16px; align-items:flex-start">
+      <div style="flex:1">
+        <h2>Dashboard</h2>
+        <p class="small">Find and hire skilled technicians</p>
 
-<div id="workers-list" class="grid" style="margin-top:12px"></div>
+        <div class="card" style="margin-top:12px">
+          <div style="display:flex; gap:10px; align-items:center">
+            <input class="input" placeholder="Enter PIN code or city...">
+            <select class="select"><option>All Categories</option></select>
+            <button class="btn">Search</button>
+          </div>
 
-    <footer class="footer">© 2025 LabourConnect — static demo</footer>
+          <div style="margin-top:12px">
+            <div class="list" id="workers-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:360px">
+        <div class="card center">
+          <h3>No jobs posted yet</h3>
+          <p class="small">Post your first job to receive bids from qualified technicians</p>
+          <div style="margin-top:12px"><a class="btn" href="#">Post Job</a></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Quick Links</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <a class="badge" href="blog.html">Blog & Tips</a>
+            <a class="badge" href="contact.html">Contact Support</a>
+            <a class="badge" href="about.html">About</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© 2025 LabourConnect</div>
   </main>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>
