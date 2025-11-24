@@ -3,94 +3,197 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard — LabourConnect</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>Dashboard — LabourConnect (PRO)</title>
+  <meta name="description" content="LabourConnect PRO Dashboard — find technicians, view bids, accept offers, contact via WhatsApp.">
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <!-- header (reuse your header if you have one) -->
-  <header class="header">
-    <div class="container bar">
-      <div class="brand"><div class="logo">LC</div>LabourConnect</div>
-      <nav class="nav">
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="header-inner container">
+      <div class="brand">
+        <div class="logo">LC</div>
+        <div class="brand-text">
+          <div class="brand-name">LabourConnect</div>
+          <div class="brand-sub muted">Find trusted technicians across India</div>
+        </div>
+      </div>
+
+      <nav class="nav" role="navigation" aria-label="Main">
         <a href="index.html">Home</a>
         <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="login.html">Login</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
+
+      <div class="actions">
+        <div class="wallet">
+          <div class="muted small">Wallet</div>
+          <div id="walletAmt" class="wallet-amt">₹0</div>
+        </div>
+        <button id="add50Btn" class="btn-ghost">Add ₹50</button>
+        <a href="login.html" class="btn primary">Login</a>
+      </div>
     </div>
   </header>
 
-  <main class="dash-wrap">
-    <div class="dash-top">
-      <div>
-        <div class="dash-title">Dashboard</div>
-        <div class="small">Find and hire skilled technicians</div>
+  <!-- HERO + FILTER (sticky filters) -->
+  <section class="hero container" aria-labelledby="hero-title">
+    <div class="hero-left">
+      <h1 id="hero-title">Find Skilled Labour & Technicians Near You</h1>
+      <p class="muted">Glassmorphism · Smooth UI · Live demo feed · Click to view profile or contact</p>
+
+      <div class="filters sticky" role="search" aria-label="Search and filters">
+        <input id="q" class="input" placeholder="Search name, skill or job (e.g. plumber)" />
+        <input id="pin" class="input small" placeholder="PIN code (e.g. 560076)" />
+        <input id="city" class="input small" placeholder="City (e.g. Bengaluru)" />
+        <select id="category" class="input small">
+          <option value="">All categories</option>
+          <option>Construction</option>
+          <option>Household</option>
+          <option>Industrial</option>
+          <option>Agricultural</option>
+        </select>
+        <div class="filters-actions">
+          <button id="filterBtn" class="btn primary">Search</button>
+          <button id="resetBtn" class="btn-ghost">Reset</button>
+        </div>
       </div>
 
-      <!-- Post Job button -->
-      <div>
-        <a class="btn" id="postJobBtn" href="#">Post Job</a>
-      </div>
+      <!-- Services carousel -->
+      <div id="serviceTrack" class="service-track" aria-hidden="false" aria-label="Service categories"></div>
     </div>
 
-    <!-- SEARCH & FILTERS -->
-    <div class="search-filters">
-      <input id="q" class="filter-input" placeholder="Search by name, skill or job (e.g. plumber)" />
-      <input id="pin" class="filter-short" placeholder="PIN code (e.g. 560076)" />
-      <input id="city" class="filter-short" placeholder="City (e.g. Bengaluru)" />
-      <select id="category" class="filter-short">
-        <option value="">All categories</option>
-        <option>Construction</option>
-        <option>Household</option>
-        <option>Industrial</option>
-        <option>Agricultural</option>
-      </select>
-      <button class="btn" id="filterBtn">Search</button>
-      <div style="margin-left:auto" class="small">Wallet: <strong id="walletAmt">₹0</strong></div>
+    <div class="hero-right">
+      <img src="https://picsum.photos/seed/labour/920/560" alt="Illustration" />
+    </div>
+  </section>
+
+  <!-- TWO LIVE PANELS: Technicians & Job Bids (equal height & width) -->
+  <section class="live-panels container" aria-label="Live dashboard panels">
+    <div class="panel live-panel">
+      <div class="panel-head">
+        <div><h2>Available Technicians</h2><div class="muted">Closest & verified — WhatsApp to chat or view full profile</div></div>
+        <div class="live-status">Live: <span id="liveTechStatus">No events yet</span></div>
+      </div>
+      <div id="liveTechBox" class="panel-body equal-scroll"></div>
     </div>
 
-    <div class="middle-row">
-      <div class="left-col">
-        <!-- Service quick slider -->
-        <div class="card" style="padding:12px;margin-top:12px">
-          <div class="small">Find Technicians</div>
-          <div style="margin-top:12px">
-            <div class="service-track" id="serviceTrack"></div>
-          </div>
-        </div>
-
-        <!-- Available technicians list -->
-        <div style="margin-top:14px">
-          <h3>Available Technicians</h3>
-          <div class="card" id="workersContainer" style="margin-top:8px; padding:12px"></div>
-        </div>
+    <div class="panel live-panel">
+      <div class="panel-head">
+        <div><h2>Customer Job Bids</h2><div class="muted">Open jobs — technicians bid, customers accept the best offer</div></div>
+        <div class="live-status">Live: <span id="liveJobStatus">No bids yet</span></div>
       </div>
-
-      <div class="right-col">
-        <!-- Job / Customer box -->
-        <div class="job-box">
-          <h4>Customer Job Bids</h4>
-          <div id="jobsList" style="margin-top:12px">
-            <!-- JS will populate -->
-          </div>
-        </div>
-
-        <!-- quick info -->
-        <div class="card" style="margin-top:12px">
-          <h4>Quick Actions</h4>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-            <button class="badge" id="addFundsBtn">Add ₹50 to Wallet (Demo)</button>
-            <button class="badge" id="clearWalletBtn">Clear Wallet</button>
-          </div>
-        </div>
-      </div>
+      <div id="liveJobBox" class="panel-body equal-scroll"></div>
     </div>
+  </section>
 
-    <div style="height:38px"></div>
-    <footer class="footer">© 2025 LabourConnect — static demo</footer>
+  <!-- MAIN LAYOUT (left: full list + featured, right: quick actions) -->
+  <main class="container main-grid">
+    <section class="left-col">
+      <div class="panel">
+        <h3 class="panel-title">Available Technicians (Full List)</h3>
+        <div id="techList" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">Featured Technicians</h3>
+        <div id="featured" class="featured-row"></div>
+      </div>
+    </section>
+
+    <aside class="right-col">
+      <div class="panel">
+        <h3 class="panel-title">Customer Job Bids</h3>
+        <div id="jobList" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">Quick Actions</h3>
+        <div class="quick-actions">
+          <button id="addFundsBtn" class="btn primary">Add ₹100</button>
+          <button id="clearWalletBtn" class="btn-ghost">Clear Wallet</button>
+        </div>
+      </div>
+    </aside>
   </main>
 
-  <!-- Modal container -->
-  <div id="profileModalRoot"></div>
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav" aria-label="Mobile quick">
+    <button onclick="document.getElementById('q').focus()">Search</button>
+    <button onclick="document.getElementById('techList').scrollIntoView({behavior:'smooth'})">Techs</button>
+    <button onclick="document.getElementById('jobList').scrollIntoView({behavior:'smooth'})">Jobs</button>
+    <button onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Footer</button>
+  </nav>
+
+  <!-- PROFILE MODAL -->
+  <div id="profileModal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-left">
+        <div id="modalAvatar" class="modal-avatar">RS</div>
+        <div id="modalName" class="modal-name">Name</div>
+        <div id="modalRole" class="muted">Role • City</div>
+        <div id="modalExp" class="muted">Experience</div>
+
+        <div class="modal-base">
+          <div class="muted">Base Price</div>
+          <div id="modalBase">₹199</div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="modalWhatsapp" class="btn whatsapp">WhatsApp</button>
+          <button id="modalClose" class="btn-ghost">Close</button>
+        </div>
+      </div>
+
+      <div class="modal-right">
+        <div class="modal-header">
+          <div id="modalRating" class="rating">4.9★</div>
+          <div class="modal-skills" id="modalSkills"></div>
+        </div>
+
+        <div id="modalBio" class="modal-bio muted"></div>
+
+        <div id="modalGallery" class="modal-gallery"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer container" role="contentinfo">
+    <div class="footer-left">
+      <div class="logo">LC</div>
+      <div class="footer-brand">LabourConnect</div>
+      <div class="muted">Connecting customers with skilled labour across India</div>
+    </div>
+
+    <div class="footer-columns">
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Categories</h4>
+        <ul>
+          <li>Construction</li>
+          <li>Household</li>
+          <li>Industrial</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <div class="muted">support@labourconnect.in</div>
+        <div class="muted">+91 90000 12345</div>
+      </div>
+    </div>
+  </footer>
 
   <script src="assets/js/dashboard.js"></script>
 </body>
