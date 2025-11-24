@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Subscriptions — LabourConnect PRO</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-bg center-page">
+  <div class="sub-card glass-card">
+    <h2>Subscriptions</h2>
+    <p class="muted">Choose a plan to unlock premium features.</p>
+    <div class="subs-grid">
+      <div class="sub-card-item glass-card">
+        <h3>Bronze</h3>
+        <div class="price">₹49 / month</div>
+        <ul>
+          <li>Unlock phone</li>
+          <li>1 extra bid</li>
+        </ul>
+        <button class="btn primary subscribe" data-plan="bronze">Subscribe</button>
+      </div>
+      <div class="sub-card-item glass-card">
+        <h3>Silver</h3>
+        <div class="price">₹99 / month</div>
+        <ul>
+          <li>Unlock phone</li>
+          <li>3 extra bids</li>
+          <li>Instant chat</li>
+        </ul>
+        <button class="btn primary subscribe" data-plan="silver">Subscribe</button>
+      </div>
+      <div class="sub-card-item glass-card">
+        <h3>Gold</h3>
+        <div class="price">₹199 / month</div>
+        <ul>
+          <li>All features</li>
+          <li>Dashboard analytics</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn primary subscribe" data-plan="gold">Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.subscribe').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const plan = btn.dataset.plan;
+        // Mock subscription purchase flow
+        alert('Subscribed to ' + plan + ' (demo).');
+      });
+    });
+  </script>
+</body>
+</html>
