@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Enter OTP — LabourConnect PRO</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-bg center-page">
+  <div class="auth-card glass-card">
+    <h2>Enter OTP</h2>
+    <p class="muted">We sent a 6-digit code to <span id="showPhone"></span></p>
+    <form id="otpForm">
+      <label>OTP
+        <input id="otpInput" type="text" inputmode="numeric" maxlength="6" pattern="\d{6}" required />
+      </label>
+      <div class="actions">
+        <button class="btn primary" type="submit">Verify</button>
+        <a class="btn ghost" id="resendOtp" href="#">Resend</a>
+      </div>
+    </form>
+    <small class="muted">This is a demo — OTP is auto-accepted if matches the mock.</small>
+  </div>
+
+  <script>
+    document.getElementById('showPhone').textContent = sessionStorage.getItem('lc_phone') || 'unknown';
+    // auto-fill on paste or from mock
+    const mock = sessionStorage.getItem('lc_mock_otp');
+    if(mock) console.info('Demo OTP:', mock);
+
+    document.getElementById('otpForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const entered = document.getElementById('otpInput').value.trim();
+      const expected = sessionStorage.getItem('lc_mock_otp');
+      if(entered === expected || entered === '123456'){ // allow 123456 for testing
+        // success: create token
+        const token = 'demo-jwt-' + Math.random().toString(36).slice(2);
+        localStorage.setItem('lc_token', token);
+        // Save user info: new user flow -> navigate to profile creation if needed
+        let user = JSON.parse(localStorage.getItem('lc_user') || 'null');
+        if(!user){
+          // simulate new user
+          user = { id: 'u_' + Date.now(), phone: sessionStorage.getItem('lc_phone'), type: 'customer', name: '', balance: 0 };
+          localStorage.setItem('lc_user', JSON.stringify(user));
+          // redirect to profile creation (we reuse index)
+          location.href = 'index.html';
+        } else {
+          location.href = 'dashboard.html';
+        }
+      } else {
+        alert('Invalid OTP');
+      }
+    });
+
+    document.getElementById('resendOtp').addEventListener('click', function(e){
+      e.preventDefault();
+      const otp = Math.floor(100000 + Math.random()*900000);
+      sessionStorage.setItem('lc_mock_otp', otp);
+      alert('OTP resent (demo). Check console for code.');
+      console.info('Resent demo OTP:', otp);
+    });
+  </script>
+</body>
+</html>
