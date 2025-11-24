@@ -1,0 +1,17 @@
+/* dashboard.css — extra styling focused on dashboard visuals */
+.panel.left-panel{display:flex;flex-direction:column}
+.panel.right-panel{display:flex;flex-direction:column}
+
+/* tech list specifics */
+.tech-card-item .info{flex:1}
+.tech-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.02);font-size:13px;color:var(--muted)}
+.whatsapp-btn{background:linear-gradient(90deg,#00c853,#00D98A);color:#021;padding:8px 10px;border-radius:8px;border:none;font-weight:700}
+
+/* equal height trick: use same min-height for both panels relative to viewport */
+.panel{min-height:480px}
+
+/* small screen stack */
+@media(max-width:980px){
+  .panel{min-height:380px}
+}
