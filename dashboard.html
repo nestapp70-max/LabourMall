@@ -7,57 +7,91 @@
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
+  <!-- header (reuse your header if you have one) -->
   <header class="header">
     <div class="container bar">
       <div class="brand"><div class="logo">LC</div>LabourConnect</div>
       <nav class="nav">
         <a href="index.html">Home</a>
-        <a href="dashboard.html">Dashboard</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
         <a href="login.html">Login</a>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <div style="display:flex; gap:16px; align-items:flex-start">
-      <div style="flex:1">
-        <h2>Dashboard</h2>
-        <p class="small">Find and hire skilled technicians</p>
+  <main class="dash-wrap">
+    <div class="dash-top">
+      <div>
+        <div class="dash-title">Dashboard</div>
+        <div class="small">Find and hire skilled technicians</div>
+      </div>
 
-        <div class="card" style="margin-top:12px">
-          <div style="display:flex; gap:10px; align-items:center">
-            <input class="input" placeholder="Enter PIN code or city...">
-            <select class="select"><option>All Categories</option></select>
-            <button class="btn">Search</button>
-          </div>
+      <!-- Post Job button -->
+      <div>
+        <a class="btn" id="postJobBtn" href="#">Post Job</a>
+      </div>
+    </div>
 
+    <!-- SEARCH & FILTERS -->
+    <div class="search-filters">
+      <input id="q" class="filter-input" placeholder="Search by name, skill or job (e.g. plumber)" />
+      <input id="pin" class="filter-short" placeholder="PIN code (e.g. 560076)" />
+      <input id="city" class="filter-short" placeholder="City (e.g. Bengaluru)" />
+      <select id="category" class="filter-short">
+        <option value="">All categories</option>
+        <option>Construction</option>
+        <option>Household</option>
+        <option>Industrial</option>
+        <option>Agricultural</option>
+      </select>
+      <button class="btn" id="filterBtn">Search</button>
+      <div style="margin-left:auto" class="small">Wallet: <strong id="walletAmt">₹0</strong></div>
+    </div>
+
+    <div class="middle-row">
+      <div class="left-col">
+        <!-- Service quick slider -->
+        <div class="card" style="padding:12px;margin-top:12px">
+          <div class="small">Find Technicians</div>
           <div style="margin-top:12px">
-            <div class="list" id="workers-list"></div>
+            <div class="service-track" id="serviceTrack"></div>
           </div>
+        </div>
+
+        <!-- Available technicians list -->
+        <div style="margin-top:14px">
+          <h3>Available Technicians</h3>
+          <div class="card" id="workersContainer" style="margin-top:8px; padding:12px"></div>
         </div>
       </div>
 
-      <div style="width:360px">
-        <div class="card center">
-          <h3>No jobs posted yet</h3>
-          <p class="small">Post your first job to receive bids from qualified technicians</p>
-          <div style="margin-top:12px"><a class="btn" href="#">Post Job</a></div>
+      <div class="right-col">
+        <!-- Job / Customer box -->
+        <div class="job-box">
+          <h4>Customer Job Bids</h4>
+          <div id="jobsList" style="margin-top:12px">
+            <!-- JS will populate -->
+          </div>
         </div>
 
+        <!-- quick info -->
         <div class="card" style="margin-top:12px">
-          <h4>Quick Links</h4>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-            <a class="badge" href="blog.html">Blog & Tips</a>
-            <a class="badge" href="contact.html">Contact Support</a>
-            <a class="badge" href="about.html">About</a>
+          <h4>Quick Actions</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+            <button class="badge" id="addFundsBtn">Add ₹50 to Wallet (Demo)</button>
+            <button class="badge" id="clearWalletBtn">Clear Wallet</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="footer">© 2025 LabourConnect</div>
+    <div style="height:38px"></div>
+    <footer class="footer">© 2025 LabourConnect — static demo</footer>
   </main>
 
-  <script src="assets/js/main.js"></script>
+  <!-- Modal container -->
+  <div id="profileModalRoot"></div>
+
+  <script src="assets/js/dashboard.js"></script>
 </body>
 </html>
