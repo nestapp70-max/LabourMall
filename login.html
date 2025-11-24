@@ -1,45 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login — LabourConnect</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+<meta charset="UTF-8">
+<title>Login | LabourConnect</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+
+<style>
+body {
+  margin: 0;
+  background: #0d1117;
+  font-family: system-ui, sans-serif;
+  color: #fff;
+}
+.container {
+  max-width: 420px;
+  margin: 80px auto;
+  background: #161b22;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
+}
+input {
+  width: 100%;
+  padding: 14px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  color: white;
+  margin: 10px 0;
+  font-size: 16px;
+}
+button {
+  width: 100%;
+  background: #00c38a;
+  padding: 14px;
+  border: 0;
+  color: #000;
+  font-weight: bold;
+  font-size: 17px;
+  border-radius: 10px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+button:hover {
+  background: #00d59a;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+#recaptcha-container {
+  margin-top: 12px;
+}
+</style>
 </head>
+
 <body>
-  <header class="header">
-    <div class="container bar">
-      <div class="brand"><div class="logo">LC</div>LabourConnect</div>
-      <nav class="nav"><a href="index.html">Home</a></nav>
-    </div>
-  </header>
 
-  <main class="container">
-    <div class="card form" style="max-width:520px;margin:40px auto">
-      <h2>Login</h2>
-      <p class="small">Use email or phone for demo login</p>
+<div class="container">
+  <h2>Login with Phone</h2>
 
-      <form id="login-form">
-        <input id="login-input" class="input" placeholder="you@example.com or +91XXXXXXXXXX" />
-        <div style="margin-top:12px; display:flex; gap:8px">
-          <button class="btn" type="submit">Login</button>
-          <a class="badge" href="index.html">Continue as Guest</a>
-        </div>
-      </form>
+  <input id="phone" placeholder="Enter phone number (e.g. +91XXXXXXXXXX)" />
 
-      <hr style="margin:16px 0; border:none; border-top:1px solid rgba(255,255,255,0.03)">
+  <div id="recaptcha-container"></div>
 
-      <h3>Phone (OTP) — Demo</h3>
-      <p class="small">This demo doesn't send real OTP. Replace with Firebase or SMS provider for production.</p>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <input class="input" placeholder="+91 98765 43210" />
-        <button class="btn" onclick="alert('For real OTP use Firebase/Twilio. This is demo.')">Send OTP</button>
-      </div>
-    </div>
+  <button onclick="sendOTP()">Send OTP</button>
 
-    <div class="footer center">© 2025 LabourConnect</div>
-  </main>
+  <input id="otp" placeholder="Enter OTP" style="display:none;" />
+  <button id="verifyBtn" onclick="verifyOTP()" style="display:none;">Verify OTP</button>
+</div>
 
-  <script src="assets/js/main.js"></script>
+
+<script>
+// --------------------------------------------------
+// 🔥 STEP 1 — Your Firebase Config
+// --------------------------------------------------
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+  projectId: "YOUR_FIREBASE_PROJECT_ID",
+  storageBucket: "YOUR_FIREBASE_BUCKET",
+  messagingSenderId: "XXXXXX",
+  appId: "XXXXXX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+
+let confirmationResult;
+
+// --------------------------------------------------
+// 🔥 Send OTP
+// --------------------------------------------------
+function sendOTP() {
+  const phone = document.getElementById("phone").value;
+
+  if (!phone.startsWith("+")) {
+    alert("Phone number must start with country code e.g. +91");
+    return;
+  }
+
+  const appVerifier = new firebase.auth.RecaptchaVerifier(
+    'recaptcha-container',
+    { size: 'normal' }
+  );
+
+  auth.signInWithPhoneNumber(phone, appVerifier)
+    .then(result => {
+      confirmationResult = result;
+      alert("OTP Sent!");
+      document.getElementById("otp").style.display = "block";
+      document.getElementById("verifyBtn").style.display = "block";
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+}
+
+
+// --------------------------------------------------
+// 🔥 Verify OTP
+// --------------------------------------------------
+function verifyOTP() {
+  const otp = document.getElementById("otp").value;
+
+  confirmationResult.confirm(otp)
+    .then(result => {
+      const user = result.user;
+
+      // save login
+      localStorage.setItem("lc_user", JSON.stringify({
+        phone: user.phoneNumber
+      }));
+
+      alert("Login Successful!");
+      window.location.href = "dashboard.html"; 
+    })
+    .catch(error => {
+      alert("Invalid OTP");
+    });
+}
+</script>
+
 </body>
 </html>
