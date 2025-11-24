@@ -1,200 +1,174 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard — LabourConnect (PRO)</title>
-  <meta name="description" content="LabourConnect PRO Dashboard — find technicians, view bids, accept offers, contact via WhatsApp.">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>LabourConnect PRO — Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-
-  <!-- HEADER -->
-  <header class="header" role="banner">
-    <div class="header-inner container">
-      <div class="brand">
-        <div class="logo">LC</div>
-        <div class="brand-text">
-          <div class="brand-name">LabourConnect</div>
-          <div class="brand-sub muted">Find trusted technicians across India</div>
-        </div>
+<body class="app-bg">
+  <header class="site-header pinned">
+    <div class="header-left">
+      <div class="logo" id="logo">
+        <div class="logo-box">LC</div>
+        <div class="brand">LabourConnect <span class="pro">PRO</span></div>
       </div>
+    </div>
 
-      <nav class="nav" role="navigation" aria-label="Main">
-        <a href="index.html">Home</a>
-        <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+    <nav class="nav-center">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="#" class="nav-link">Browse</a>
+      <a href="#" class="nav-link">Blog</a>
+      <a href="#" class="nav-link">About</a>
+    </nav>
 
-      <div class="actions">
-        <div class="wallet">
-          <div class="muted small">Wallet</div>
-          <div id="walletAmt" class="wallet-amt">₹0</div>
-        </div>
-        <button id="add50Btn" class="btn-ghost">Add ₹50</button>
-        <a href="login.html" class="btn primary">Login</a>
+    <div class="header-right">
+      <div class="wallet-summary glass-pill" id="walletSummary">
+        <div>Wallet ₹<span id="walletBalance">0</span></div>
+        <button class="btn tiny" id="addMoneyBtn">Top-up</button>
       </div>
+      <button class="btn ghost" id="btn-profile">Profile</button>
+      <button class="btn primary" id="btn-post-job">Post Job</button>
     </div>
   </header>
 
-  <!-- HERO + FILTER (sticky filters) -->
-  <section class="hero container" aria-labelledby="hero-title">
-    <div class="hero-left">
-      <h1 id="hero-title">Find Skilled Labour & Technicians Near You</h1>
-      <p class="muted">Glassmorphism · Smooth UI · Live demo feed · Click to view profile or contact</p>
-
-      <div class="filters sticky" role="search" aria-label="Search and filters">
-        <input id="q" class="input" placeholder="Search name, skill or job (e.g. plumber)" />
-        <input id="pin" class="input small" placeholder="PIN code (e.g. 560076)" />
-        <input id="city" class="input small" placeholder="City (e.g. Bengaluru)" />
-        <select id="category" class="input small">
-          <option value="">All categories</option>
-          <option>Construction</option>
-          <option>Household</option>
-          <option>Industrial</option>
-          <option>Agricultural</option>
-        </select>
-        <div class="filters-actions">
-          <button id="filterBtn" class="btn primary">Search</button>
-          <button id="resetBtn" class="btn-ghost">Reset</button>
+  <main class="container dashboard-grid">
+    <!-- Category slider -->
+    <section class="category-slider glass-card" aria-label="Categories">
+      <div class="slider-left">
+        <h3>Categories</h3>
+      </div>
+      <div class="slider-track-wrap">
+        <button class="slider-arrow left" id="catPrev" aria-label="Previous">‹</button>
+        <div class="slider-track" id="categoryTrack" tabindex="0">
+          <!-- JS will populate -->
         </div>
-      </div>
-
-      <!-- Services carousel -->
-      <div id="serviceTrack" class="service-track" aria-hidden="false" aria-label="Service categories"></div>
-    </div>
-
-    <div class="hero-right">
-      <img src="https://picsum.photos/seed/labour/920/560" alt="Illustration" />
-    </div>
-  </section>
-
-  <!-- TWO LIVE PANELS: Technicians & Job Bids (equal height & width) -->
-  <section class="live-panels container" aria-label="Live dashboard panels">
-    <div class="panel live-panel">
-      <div class="panel-head">
-        <div><h2>Available Technicians</h2><div class="muted">Closest & verified — WhatsApp to chat or view full profile</div></div>
-        <div class="live-status">Live: <span id="liveTechStatus">No events yet</span></div>
-      </div>
-      <div id="liveTechBox" class="panel-body equal-scroll"></div>
-    </div>
-
-    <div class="panel live-panel">
-      <div class="panel-head">
-        <div><h2>Customer Job Bids</h2><div class="muted">Open jobs — technicians bid, customers accept the best offer</div></div>
-        <div class="live-status">Live: <span id="liveJobStatus">No bids yet</span></div>
-      </div>
-      <div id="liveJobBox" class="panel-body equal-scroll"></div>
-    </div>
-  </section>
-
-  <!-- MAIN LAYOUT (left: full list + featured, right: quick actions) -->
-  <main class="container main-grid">
-    <section class="left-col">
-      <div class="panel">
-        <h3 class="panel-title">Available Technicians (Full List)</h3>
-        <div id="techList" class="list"></div>
-      </div>
-
-      <div class="panel">
-        <h3 class="panel-title">Featured Technicians</h3>
-        <div id="featured" class="featured-row"></div>
+        <button class="slider-arrow right" id="catNext" aria-label="Next">›</button>
       </div>
     </section>
 
-    <aside class="right-col">
-      <div class="panel">
-        <h3 class="panel-title">Customer Job Bids</h3>
-        <div id="jobList" class="list"></div>
+    <!-- Main dashboard: two boxes equal height -->
+    <section class="live-panels">
+      <div class="panel left-panel glass-card" id="techPanel" aria-live="polite">
+        <div class="panel-header">
+          <h4>Available Technicians</h4>
+          <div class="panel-actions">
+            <input id="searchTech" placeholder="Search by name or skill" class="input search" />
+            <select id="filterCity" class="input select">
+              <option value="">All Cities</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-body" id="techList">
+          <!-- technician cards inserted by JS -->
+        </div>
+        <div class="panel-footer muted">Showing <span id="techCount">0</span> technicians</div>
       </div>
 
-      <div class="panel">
-        <h3 class="panel-title">Quick Actions</h3>
-        <div class="quick-actions">
-          <button id="addFundsBtn" class="btn primary">Add ₹100</button>
-          <button id="clearWalletBtn" class="btn-ghost">Clear Wallet</button>
+      <div class="panel right-panel glass-card" id="jobsPanel" aria-live="polite">
+        <div class="panel-header">
+          <h4>Customer Job Bids</h4>
+          <div class="panel-actions flex-right">
+            <button class="btn outline" id="btn-filter-jobs">Filters</button>
+            <button class="btn primary" id="btn-new-job">Post Job</button>
+          </div>
         </div>
+        <div class="panel-body" id="jobList">
+          <!-- job cards inserted by JS -->
+        </div>
+        <div class="panel-footer muted">Real-time bids updated live</div>
       </div>
-    </aside>
+    </section>
+
+    <!-- Featured technicians carousel -->
+    <section class="featured glass-card">
+      <h4>Featured Technicians</h4>
+      <div class="featured-carousel" id="featuredCarousel">
+        <!-- JS -->
+      </div>
+    </section>
   </main>
 
-  <!-- MOBILE NAV -->
-  <nav class="mobile-nav" aria-label="Mobile quick">
-    <button onclick="document.getElementById('q').focus()">Search</button>
-    <button onclick="document.getElementById('techList').scrollIntoView({behavior:'smooth'})">Techs</button>
-    <button onclick="document.getElementById('jobList').scrollIntoView({behavior:'smooth'})">Jobs</button>
-    <button onclick="document.querySelector('footer').scrollIntoView({behavior:'smooth'})">Footer</button>
-  </nav>
+  <!-- Technician Profile Modal (reusable) -->
+  <div id="modal-root"></div>
 
-  <!-- PROFILE MODAL -->
-  <div id="profileModal" class="modal" role="dialog" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-left">
-        <div id="modalAvatar" class="modal-avatar">RS</div>
-        <div id="modalName" class="modal-name">Name</div>
-        <div id="modalRole" class="muted">Role • City</div>
-        <div id="modalExp" class="muted">Experience</div>
-
-        <div class="modal-base">
-          <div class="muted">Base Price</div>
-          <div id="modalBase">₹199</div>
+  <!-- Wallet modal -->
+  <div class="modal-backdrop hidden" id="walletModal">
+    <div class="modal-card glass-card" role="dialog" aria-modal="true" aria-labelledby="walletTitle">
+      <button class="modal-close" data-close>✕</button>
+      <h3 id="walletTitle">Wallet — Top Up</h3>
+      <p class="muted">Add funds to your wallet. This is a demo mock payment flow.</p>
+      <div class="wallet-controls">
+        <label>Amount (₹)</label>
+        <input id="walletAmount" type="number" min="10" value="100" />
+        <div class="wallet-actions">
+          <button class="btn primary" id="walletPay">Pay (Mock)</button>
+          <button class="btn ghost" data-close>Cancel</button>
         </div>
-
-        <div class="modal-actions">
-          <button id="modalWhatsapp" class="btn whatsapp">WhatsApp</button>
-          <button id="modalClose" class="btn-ghost">Close</button>
-        </div>
-      </div>
-
-      <div class="modal-right">
-        <div class="modal-header">
-          <div id="modalRating" class="rating">4.9★</div>
-          <div class="modal-skills" id="modalSkills"></div>
-        </div>
-
-        <div id="modalBio" class="modal-bio muted"></div>
-
-        <div id="modalGallery" class="modal-gallery"></div>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer container" role="contentinfo">
-    <div class="footer-left">
-      <div class="logo">LC</div>
-      <div class="footer-brand">LabourConnect</div>
-      <div class="muted">Connecting customers with skilled labour across India</div>
+  <!-- Post job modal (also link to post-job.html) -->
+  <div class="modal-backdrop hidden" id="postJobModal">
+    <div class="modal-card glass-card" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close>✕</button>
+      <h3>Post a Job</h3>
+      <form id="postJobForm" class="stack">
+        <label>Job Title <input name="title" required /></label>
+        <label>Description <textarea name="description" rows="4" required></textarea></label>
+        <label>Budget From <input name="budget_from" type="number" /></label>
+        <label>Budget To <input name="budget_to" type="number" /></label>
+        <label>Category
+          <select name="category" required id="jobCategorySelect"></select>
+        </label>
+        <label>PIN Code <input name="pincode" /></label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Post Job</button>
+          <button class="btn ghost" type="button" data-close>Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div class="footer-columns">
+  <footer class="site-footer fixed-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Company</h4>
+        <p>LabourConnect PRO</p>
+      </div>
       <div>
         <h4>Quick Links</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="blog.html">Blog</a></li>
-        </ul>
+        <a href="post-job.html">Post Job</a>
       </div>
-
       <div>
-        <h4>Categories</h4>
-        <ul>
-          <li>Construction</li>
-          <li>Household</li>
-          <li>Industrial</li>
-        </ul>
+        <h4>Policies</h4>
+        <a href="#">Privacy</a>
       </div>
-
       <div>
         <h4>Contact</h4>
-        <div class="muted">support@labourconnect.in</div>
-        <div class="muted">+91 90000 12345</div>
+        <a href="https://wa.me/919000000000">WhatsApp</a>
       </div>
     </div>
   </footer>
 
-  <script src="assets/js/dashboard.js"></script>
+  <!-- Scripts -->
+  <script src="modal.js"></script>
+  <script src="auth.js"></script>
+  <script src="wallet.js"></script>
+  <script src="jobs.js"></script>
+  <script src="filters.js"></script>
+  <script src="dashboard.js"></script>
+
+  <script>
+    // initialize small behaviors (safe to run)
+    document.getElementById('addMoneyBtn').addEventListener('click', ()=> showModal('walletModal'));
+    document.getElementById('btn-post-job').addEventListener('click', ()=> showModal('postJobModal'));
+    document.getElementById('btn-new-job').addEventListener('click', ()=> showModal('postJobModal'));
+  </script>
 </body>
 </html>
