@@ -1,151 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Login | LabourConnect</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-
-<style>
-body {
-  margin: 0;
-  background: #0d1117;
-  font-family: system-ui, sans-serif;
-  color: #fff;
-}
-.container {
-  max-width: 420px;
-  margin: 80px auto;
-  background: #161b22;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
-}
-input {
-  width: 100%;
-  padding: 14px;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 10px;
-  color: white;
-  margin: 10px 0;
-  font-size: 16px;
-}
-button {
-  width: 100%;
-  background: #00c38a;
-  padding: 14px;
-  border: 0;
-  color: #000;
-  font-weight: bold;
-  font-size: 17px;
-  border-radius: 10px;
-  margin-top: 12px;
-  cursor: pointer;
-}
-button:hover {
-  background: #00d59a;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-#recaptcha-container {
-  margin-top: 12px;
-}
-</style>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Login — LabourConnect PRO</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+<body class="app-bg center-page">
+  <div class="auth-card glass-card">
+    <h2>Login</h2>
+    <p class="muted">Enter your phone number to receive an OTP.</p>
+    <form id="loginForm">
+      <label>Phone Number
+        <input id="phoneInput" type="tel" placeholder="+91 9#########" required />
+      </label>
+      <div class="actions">
+        <button class="btn primary" type="submit">Send OTP</button>
+        <a class="btn ghost" href="index.html">Cancel</a>
+      </div>
+    </form>
+    <small class="muted">By continuing you agree to our Terms & Privacy.</small>
+  </div>
 
-<body>
-
-<div class="container">
-  <h2>Login with Phone</h2>
-
-  <input id="phone" placeholder="Enter phone number (e.g. +91XXXXXXXXXX)" />
-
-  <div id="recaptcha-container"></div>
-
-  <button onclick="sendOTP()">Send OTP</button>
-
-  <input id="otp" placeholder="Enter OTP" style="display:none;" />
-  <button id="verifyBtn" onclick="verifyOTP()" style="display:none;">Verify OTP</button>
-</div>
-
-
-<script>
-// --------------------------------------------------
-// 🔥 STEP 1 — Your Firebase Config
-// --------------------------------------------------
-const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-  projectId: "YOUR_FIREBASE_PROJECT_ID",
-  storageBucket: "YOUR_FIREBASE_BUCKET",
-  messagingSenderId: "XXXXXX",
-  appId: "XXXXXX"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-
-let confirmationResult;
-
-// --------------------------------------------------
-// 🔥 Send OTP
-// --------------------------------------------------
-function sendOTP() {
-  const phone = document.getElementById("phone").value;
-
-  if (!phone.startsWith("+")) {
-    alert("Phone number must start with country code e.g. +91");
-    return;
-  }
-
-  const appVerifier = new firebase.auth.RecaptchaVerifier(
-    'recaptcha-container',
-    { size: 'normal' }
-  );
-
-  auth.signInWithPhoneNumber(phone, appVerifier)
-    .then(result => {
-      confirmationResult = result;
-      alert("OTP Sent!");
-      document.getElementById("otp").style.display = "block";
-      document.getElementById("verifyBtn").style.display = "block";
-    })
-    .catch(error => {
-      alert(error.message);
+  <script src="auth.js"></script>
+  <script>
+    // login form sends to OTP page (mock)
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const phone = document.getElementById('phoneInput').value.trim();
+      if(!phone) return alert('Enter phone');
+      // Save to sessionStorage for mock OTP step
+      sessionStorage.setItem('lc_phone', phone);
+      // In real: call Firebase phone auth or your OTP service to send OTP
+      // For demo, we generate OTP and store:
+      const otp = Math.floor(100000 + Math.random()*900000);
+      sessionStorage.setItem('lc_mock_otp', otp);
+      console.info('Mock OTP (for demo):', otp);
+      location.href = 'otp.html';
     });
-}
-
-
-// --------------------------------------------------
-// 🔥 Verify OTP
-// --------------------------------------------------
-function verifyOTP() {
-  const otp = document.getElementById("otp").value;
-
-  confirmationResult.confirm(otp)
-    .then(result => {
-      const user = result.user;
-
-      // save login
-      localStorage.setItem("lc_user", JSON.stringify({
-        phone: user.phoneNumber
-      }));
-
-      alert("Login Successful!");
-      window.location.href = "dashboard.html"; 
-    })
-    .catch(error => {
-      alert("Invalid OTP");
-    });
-}
-</script>
-
+  </script>
 </body>
 </html>
