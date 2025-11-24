@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<link rel="stylesheet" href="styles.css">
+<title>Post Job — LabourConnect PRO</title>
+<body class="app-bg center-page">
+  <div class="post-card glass-card">
+    <h2>Post a Job</h2>
+    <form id="postJobPageForm" class="stack">
+      <label>Job Title <input name="title" required /></label>
+      <label>Description <textarea name="description" rows="5" required></textarea></label>
+      <label>Budget Min <input name="min" type="number" /></label>
+      <label>Budget Max <input name="max" type="number" /></label>
+      <label>Category
+        <select name="category" id="pageCategory"></select>
+      </label>
+      <label>Upload Images <input type="file" name="images" multiple accept="image/*" /></label>
+      <label>Location (City) <input name="city" /></label>
+      <label>PIN Code <input name="pincode" /></label>
+      <div class="actions">
+        <button class="btn primary" type="submit">Post Job</button>
+        <a class="btn ghost" href="dashboard.html">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="jobs.js"></script>
+  <script>
+    // fill categories and handle submission
+    populateCategorySelect(document.getElementById('pageCategory'));
+    document.getElementById('postJobPageForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      const job = {
+        id: 'job_' + Date.now(),
+        title: fd.get('title'),
+        description: fd.get('description'),
+        category: fd.get('category'),
+        budget_from: Number(fd.get('min') || 0),
+        budget_to: Number(fd.get('max') || 0),
+        pincode: fd.get('pincode'),
+        city: fd.get('city'),
+        created_at: Date.now(),
+        bids: []
+      };
+      addJob(job);
+      alert('Job posted (demo). Returning to dashboard.');
+      location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>
